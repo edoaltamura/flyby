@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#SBATCH --ntasks=172
+#SBATCH --exclusive
+#SBATCH -J flyby
+#SBATCH -o log_flyby.out
+#SBATCH -e log_flyby.err
+#SBATCH -p cosma6
+#SBATCH -A dp004
+#SBATCH -t 6:00:00
+
+module purge
+module load intel_comp
+module load openmpi
+module load gnu_comp
+module load gnu-parallel/20181122
+module load parallel_hdf5
+module load python/3.6.5
+module load ffmpeg/4.0.2
+
+export OMPI_MCA_mpi_warn_on_fork=0
+
+mpirun -np $SLURM_NTASKS python3 flight.py
+
+ffmpeg -framerate 60 -i out_%04d.png -vf scale=-2:1080,format=yuv420p -c:v libx264 -profile:v high -c:a aac -strict experimental -b:a 192k -movflags faststart -crf 16 out.mp4
+
+echo "Job done, info follows."
+sacct -j $SLURM_JOBID --format=JobID,JobName,Partition,AveRSS,MaxRSS,AveVMSize,MaxVMSize,Elapsed,ExitCode
