@@ -9,10 +9,9 @@ from matplotlib import cm
 import matplotlib.colors as mcolors
 from PIL import Image, ImageOps, ImageEnhance
 
-resolution = 2048
-run_name = "VR93 -8res Ref"
-snap_filepath_zoom = "L0300N0564_VR93_-8res_Ref_2749.hdf5"
-velociraptor_properties_zoom = "L0300N0564_VR93_-8res_0036.properties"
+resolution = 4096
+snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR139_+1res_MinimumDistance/snapshots/L0300N0564_VR139_+1res_MinimumDistance_2749.hdf5"
+velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR139_+1res_MinimumDistance/stf/L0300N0564_VR139_+1res_MinimumDistance_2749/L0300N0564_VR139_+1res_MinimumDistance_2749.properties"
 
 
 def binary_normalise(array):
@@ -192,4 +191,4 @@ cax.yaxis.label.set_color('white')
 cax.tick_params(axis='x', colors='white')
 cax.tick_params(axis='y', colors='white')
 plt.show()
-# fig.savefig('out.png', bbox_inches='tight', pad_inches=0.)
+fig.savefig('out.png', bbox_inches='tight', pad_inches=0.)
