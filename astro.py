@@ -162,7 +162,7 @@ ax.get_yaxis().set_visible(False)
 ax.set_xlim(region[0], region[1])
 ax.set_ylim(region[2], region[3])
 
-ax.imshow(combined_map, origin="lower", extent=region)
+ax.imshow(bin_dens, origin="lower", extent=region)
 
 # Create the legend
 # legend_resolution = 100
