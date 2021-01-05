@@ -123,6 +123,7 @@ if not os.path.isfile("density_map.npy"):
     np.save("density_map.npy", density_map)
 
 density_map = np.load("density_map.npy")
+density_map[density_map == 0.] = np.nan
 
 # Calculate particle mass and rho_crit
 data = sw.load(snap_filepath_zoom)
@@ -145,6 +146,7 @@ if not os.path.isfile("temp_map.npy"):
     np.save("temp_map.npy", temp_map)
 
 temp_map = np.load("temp_map.npy")
+temp_map[temp_map == 0.] = np.nan
 # temp_map_rgb = plt.imshow(np.log10(temp_map), origin="lower", extent=region, cmap="rainbow")
 
 # Construct the 2 channels and merge map
@@ -162,7 +164,7 @@ ax.get_yaxis().set_visible(False)
 ax.set_xlim(region[0], region[1])
 ax.set_ylim(region[2], region[3])
 
-ax.imshow(bin_dens, origin="lower", extent=region)
+ax.imshow(combined_map, origin="lower", extent=region)
 
 # Create the legend
 # legend_resolution = 100
