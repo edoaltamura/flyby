@@ -150,7 +150,7 @@ temp_map = np.load("temp_map.npy")
 # Construct the 2 channels and merge map
 bin_temp = binary_normalise(np.log10(temp_map))
 bin_dens = binary_normalise(np.log10(density_map))
-combined_map = combine_layers(bin_dens, bin_temp, res=resolution)
+combined_map = bin_dens#combine_layers(bin_dens, bin_temp, res=resolution)
 
 # Set-up figure and axes instance
 fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
@@ -165,30 +165,30 @@ ax.set_ylim(region[2], region[3])
 ax.imshow(combined_map, origin="lower", extent=region)
 
 # Create the legend
-legend_resolution = 100
-x_legend, y_legend = np.meshgrid(
-    np.linspace(0, 1, legend_resolution),
-    np.linspace(0, 1, legend_resolution)
-)
-cmap2d = combine_layers(y_legend, x_legend, res=legend_resolution)
-
-cax = fig.add_axes([0.87, 0.87, 0.1, 0.1])
-cax.imshow(cmap2d, origin="lower", extent=([
-    np.log10(np.min(temp_map)),
-    np.log10(np.max(temp_map)),
-    np.log10(np.min(density_map)),
-    np.log10(np.max(density_map))
-]))
-force_aspect(cax)
-cax.set_xlabel(r"$\log_{10} (T / \rm{K})$")
-cax.set_ylabel(r"$\log_{10} (\rho / \rho_{\rm{crit}})$")
-cax.spines['bottom'].set_color('white')
-cax.spines['top'].set_color('white')
-cax.spines['right'].set_color('white')
-cax.spines['left'].set_color('white')
-cax.xaxis.label.set_color('white')
-cax.yaxis.label.set_color('white')
-cax.tick_params(axis='x', colors='white')
-cax.tick_params(axis='y', colors='white')
+# legend_resolution = 100
+# x_legend, y_legend = np.meshgrid(
+#     np.linspace(0, 1, legend_resolution),
+#     np.linspace(0, 1, legend_resolution)
+# )
+# cmap2d = combine_layers(y_legend, x_legend, res=legend_resolution)
+#
+# cax = fig.add_axes([0.87, 0.87, 0.1, 0.1])
+# cax.imshow(cmap2d, origin="lower", extent=([
+#     np.log10(np.min(temp_map)),
+#     np.log10(np.max(temp_map)),
+#     np.log10(np.min(density_map)),
+#     np.log10(np.max(density_map))
+# ]))
+# force_aspect(cax)
+# cax.set_xlabel(r"$\log_{10} (T / \rm{K})$")
+# cax.set_ylabel(r"$\log_{10} (\rho / \rho_{\rm{crit}})$")
+# cax.spines['bottom'].set_color('white')
+# cax.spines['top'].set_color('white')
+# cax.spines['right'].set_color('white')
+# cax.spines['left'].set_color('white')
+# cax.xaxis.label.set_color('white')
+# cax.yaxis.label.set_color('white')
+# cax.tick_params(axis='x', colors='white')
+# cax.tick_params(axis='y', colors='white')
 plt.show()
 fig.savefig('out.png', bbox_inches='tight', pad_inches=0.)
