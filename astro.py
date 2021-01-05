@@ -129,7 +129,7 @@ data = sw.load(snap_filepath_zoom)
 unitLength = data.metadata.units.length
 unitMass = data.metadata.units.mass
 rho_crit = unyt.unyt_quantity(
-    data.metadata.cosmology['Critical density [internal units]'],
+    data.metadata.cosmology_raw['Critical density [internal units]'],
     unitMass / unitLength ** 3
 ).to('Msun/Mpc**3')
 density_map /= rho_crit.value
