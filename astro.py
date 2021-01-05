@@ -150,7 +150,7 @@ temp_map = np.load("temp_map.npy")
 # Construct the 2 channels and merge map
 bin_temp = binary_normalise(np.log10(temp_map))
 bin_dens = binary_normalise(np.log10(density_map))
-combined_map = bin_dens#combine_layers(bin_dens, bin_temp, res=resolution)
+combined_map = combine_layers(bin_dens, bin_temp, res=resolution)
 
 # Set-up figure and axes instance
 fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
@@ -190,5 +190,5 @@ ax.imshow(combined_map, origin="lower", extent=region)
 # cax.yaxis.label.set_color('white')
 # cax.tick_params(axis='x', colors='white')
 # cax.tick_params(axis='y', colors='white')
-plt.show()
+# plt.show()
 fig.savefig('out.png', bbox_inches='tight', pad_inches=0.)
