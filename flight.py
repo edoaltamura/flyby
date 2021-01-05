@@ -17,10 +17,9 @@ comm = MPI.COMM_WORLD
 mpi_rank = comm.Get_rank()
 mpi_size = comm.Get_size()
 
-resolution = 2048
-run_name = "VR93 -8res Ref"
-snap_filepath_zoom = "/cosma/home/dp004/dc-alta2/data7/xl-zooms/hydro/L0300N0564_VR93_-8res_Ref/snapshots/L0300N0564_VR93_-8res_Ref_2749.hdf5"
-velociraptor_properties_zoom = "/cosma/home/dp004/dc-alta2/data7/xl-zooms/hydro/L0300N0564_VR93_-8res_Ref/stf/L0300N0564_VR93_-8res_Ref_2749/L0300N0564_VR93_-8res_Ref_2749.properties"
+resolution = 4096
+snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/snapshots/L0300N0564_VR813_+1res_MinimumDistance_2749.hdf5"
+velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/stf/L0300N0564_VR813_+1res_MinimumDistance_2749/L0300N0564_VR813_+1res_MinimumDistance_2749.properties"
 
 color_bounds_log10density = [0., 8.]
 color_bounds_log10temperature = [5., 9.]
@@ -154,7 +153,7 @@ rho_crit = unyt.unyt_quantity(
 data.gas.smoothing_lengths = data.gas.smoothing_lengths * 2.0
 
 # Define camera path and number of frames
-num_frames = 1800
+num_frames = 1
 rotation_path = np.linspace(0, 360, num_frames)
 radial_path = np.sqrt(np.linspace(0.2 ** 2, 1.6 ** 2, num_frames)) * size.value
 
