@@ -170,7 +170,7 @@ for img_index, (azimuth, radius) in enumerate(
     camera_args = {'x': xCen.value,
                    'y': yCen.value,
                    'z': zCen.value,
-                   'r': radius,
+                   'r': 10#radius,
                    't': 0,
                    'p': azimuth,
                    'zoom': 1,
