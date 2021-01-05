@@ -10,8 +10,8 @@ import matplotlib.colors as mcolors
 from PIL import Image, ImageOps, ImageEnhance
 
 resolution = 4096
-snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR139_+1res_MinimumDistance/snapshots/L0300N0564_VR139_+1res_MinimumDistance_2749.hdf5"
-velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR139_+1res_MinimumDistance/stf/L0300N0564_VR139_+1res_MinimumDistance_2749/L0300N0564_VR139_+1res_MinimumDistance_2749.properties"
+snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/snapshots/L0300N0564_VR813_+1res_MinimumDistance_2749.hdf5"
+velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/stf/L0300N0564_VR813_+1res_MinimumDistance_2749/L0300N0564_VR813_+1res_MinimumDistance_2749.properties"
 
 
 def binary_normalise(array):
