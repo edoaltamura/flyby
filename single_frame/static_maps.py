@@ -94,7 +94,7 @@ def process_single_halo(
 
 
 if __name__ == "__main__":
-    resolution = 256
+    resolution = 4096
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/snapshots/L0300N0564_VR813_+1res_MinimumDistance_2749.hdf5"
     velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/stf/L0300N0564_VR813_+1res_MinimumDistance_2749/L0300N0564_VR813_+1res_MinimumDistance_2749.properties"
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         process_single_halo(
             snap_filepath_zoom,
             velociraptor_properties_zoom,
-            slice_thickness=unyt.unyt_quantity(0.5, unyt.Mpc),
-            map_size_R500_units=1,
+            slice_thickness=unyt.unyt_quantity(1, unyt.Mpc),
+            map_size_R500_units=5,
             field=field
         )
