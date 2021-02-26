@@ -48,7 +48,7 @@ def process_single_halo(
         [zCen - slice_thickness, zCen + slice_thickness]
     ]
     mask.constrain_spatial(region)
-    # mask.constrain_mask("gas", "temperatures", 1.e5 * mask.units.temperature, 5.e9 * mask.units.temperature)
+    mask.constrain_mask("gas", "temperatures", 1.e5 * mask.units.temperature, 5.e9 * mask.units.temperature)
     data = sw.load(path_to_snap, mask=mask)
     region = [
         xCen - map_size,
