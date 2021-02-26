@@ -48,7 +48,7 @@ def process_single_halo(
         [zCen - slice_thickness, zCen + slice_thickness]
     ]
     mask.constrain_spatial(region)
-    mask.constrain_mask("gas", "temperatures", 1.e5 * mask.units.temperature, 5.e9 * mask.units.temperature)
+    # mask.constrain_mask("gas", "temperatures", 1.e5 * mask.units.temperature, 5.e9 * mask.units.temperature)
     data = sw.load(path_to_snap, mask=mask)
     region = [
         xCen - map_size,
@@ -86,7 +86,7 @@ def process_single_halo(
     ax.get_yaxis().set_visible(False)
     ax.set_xlim(region[0], region[1])
     ax.set_ylim(region[2], region[3])
-    ax.imshow(smoothed_map, origin="lower", extent=region)
+    ax.imshow(smoothed_map, origin="lower", extent=region, cmap='Greys')
     plt.show()
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
@@ -100,6 +100,6 @@ if __name__ == "__main__":
         snap_filepath_zoom,
         velociraptor_properties_zoom,
         slice_thickness=unyt.unyt_quantity(0.1, unyt.Mpc),
-        map_size_R500_units=3,
+        map_size_R500_units=1,
         field='densities'
     )
