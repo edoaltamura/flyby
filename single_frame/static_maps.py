@@ -76,7 +76,7 @@ def process_single_halo(
 
     elif field == 'velocity_divergences':
         data.gas.velocity_divergences[data.gas.velocity_divergences.value >= 0.] = np.nan
-        data.gas.velocity_divergences *= -1
+        data.gas.velocity_divergences = np.abs(data.gas.velocity_divergences)
         smoothed_map = project_gas(data, resolution=resolution, project="velocity_divergences", parallel=True, region=region)
 
     smoothed_map[smoothed_map == 0.] = np.nan
