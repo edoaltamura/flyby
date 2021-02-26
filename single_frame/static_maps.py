@@ -74,8 +74,9 @@ def process_single_halo(
                                              parallel=True, region=region)
         smoothed_map = mass_weighted_temp_map / mass_map
 
-    elif field == 'velocity_divergence_time_differentials':
-        smoothed_map = project_gas(data, resolution=resolution, project="velocity_divergence_time_differentials", parallel=True, region=region)
+    elif field == 'velocity_divergences':
+        data.gas.velocity_divergences[data.gas.velocity_divergences.value >= 0.] = np.nan
+        smoothed_map = project_gas(data, resolution=resolution, project="velocity_divergences", parallel=True, region=region)
 
     smoothed_map[smoothed_map == 0.] = np.nan
     smoothed_map = binary_normalise(np.log10(smoothed_map))
@@ -104,5 +105,5 @@ if __name__ == "__main__":
         velociraptor_properties_zoom,
         slice_thickness=unyt.unyt_quantity(0.1, unyt.Mpc),
         map_size_R500_units=1,
-        field='velocity_divergence_time_differentials'
+        field='velocity_divergences'
     )
