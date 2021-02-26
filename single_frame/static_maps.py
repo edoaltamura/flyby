@@ -64,8 +64,6 @@ def process_single_halo(
 
     if field == 'densities':
         smoothed_map = project_gas(data, resolution=resolution, project="densities", parallel=True, region=region)
-        rho_crit = data.metadata.cosmology_raw['Critical density [internal units]'] * density_units
-        smoothed_map /= rho_crit
 
     elif field == 'mass_weighted_temperatures':
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
