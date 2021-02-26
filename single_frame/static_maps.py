@@ -59,13 +59,13 @@ def process_single_halo(
 
     if field == 'densities':
         smoothed_map = project_gas(data, resolution=resolution, project="densities", parallel=True, region=region)
-        unitLength = data.metadata.units.length
-        unitMass = data.metadata.units.mass
-        rho_crit = unyt.unyt_quantity(
-            data.metadata.cosmology_raw['Critical density [internal units]'],
-            unitMass / unitLength ** 3
-        ).to('Msun/Mpc**3')
-        smoothed_map /= rho_crit.value
+        # unitLength = data.metadata.units.length
+        # unitMass = data.metadata.units.mass
+        # rho_crit = unyt.unyt_quantity(
+        #     data.metadata.cosmology_raw['Critical density [internal units]'],
+        #     unitMass / unitLength ** 3
+        # ).to('Msun/Mpc**3')
+        # smoothed_map /= rho_crit.value
 
     elif field == 'mass_weighted_temperatures':
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
