@@ -9,6 +9,8 @@ from matplotlib import cm
 import matplotlib.colors as mcolors
 from PIL import Image, ImageOps, ImageEnhance
 
+from numba import set_num_threads
+set_num_threads(28)
 
 def binary_normalise(array):
     return (array - np.min(array)) / (np.max(array) - np.min(array))
