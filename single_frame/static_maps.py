@@ -50,7 +50,7 @@ def process_single_halo(
     temperature_units = mask.units.temperature
     density_units = mask.units.mass / mask.units.length ** 3
     density_low = (1e-10 / unyt.cm ** 3 * unyt.mp).to(density_units)
-    density_high = (1e1 / unyt.cm ** 3 * unyt.mp).to(density_units)
+    density_high = (2 / unyt.cm ** 3 * unyt.mp).to(density_units)
     mask.constrain_spatial(region)
     mask.constrain_mask("gas", "temperatures", 1.e5 * temperature_units, 5.e9 * temperature_units)
     mask.constrain_mask("gas", "densities", density_low, density_high)
@@ -90,7 +90,6 @@ def process_single_halo(
     ax.set_xlim(region[0], region[1])
     ax.set_ylim(region[2], region[3])
     ax.imshow(smoothed_map, origin="lower", extent=region, cmap='Greys_r')
-    plt.show()
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
 
@@ -99,10 +98,11 @@ if __name__ == "__main__":
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/snapshots/L0300N0564_VR813_+1res_MinimumDistance_2749.hdf5"
     velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/stf/L0300N0564_VR813_+1res_MinimumDistance_2749/L0300N0564_VR813_+1res_MinimumDistance_2749.properties"
 
-    process_single_halo(
-        snap_filepath_zoom,
-        velociraptor_properties_zoom,
-        slice_thickness=unyt.unyt_quantity(0.5, unyt.Mpc),
-        map_size_R500_units=1,
-        field='velocity_divergences'
-    )
+    for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences']:
+        process_single_halo(
+            snap_filepath_zoom,
+            velociraptor_properties_zoom,
+            slice_thickness=unyt.unyt_quantity(0.5, unyt.Mpc),
+            map_size_R500_units=1,
+            field=field
+        )
