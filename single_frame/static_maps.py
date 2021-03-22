@@ -101,29 +101,29 @@ def process_single_halo(
     fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
     ax = fig.add_subplot(1, 1, 1)
     fig.subplots_adjust(0, 0, 1, 1)
-    # plt.axis('off')
-    # ax.get_xaxis().set_visible(False)
-    # ax.get_yaxis().set_visible(False)
+    plt.axis('off')
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
     ax.imshow(smoothed_map, origin="lower", extent=region, cmap=cmap)
     force_aspect(ax)
-    # ax.set_xlim(region[0], region[1])
-    # ax.set_ylim(region[2], region[3])
-    # circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
-    # ax.add_artist(circle_r500)
-    # ax.text(
-    #     xCen,
-    #     yCen + 1.05 * R500c,
-    #     r"$R_{500c}$",
-    #     color="black",
-    #     ha="center",
-    #     va="bottom"
-    # )
+    ax.set_xlim(region[0], region[1])
+    ax.set_ylim(region[2], region[3])
+    circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
+    ax.add_artist(circle_r500)
+    ax.text(
+        xCen,
+        yCen + 1.05 * R500c,
+        r"$R_{500c}$",
+        color="black",
+        ha="center",
+        va="bottom"
+    )
     plt.show()
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
 
 if __name__ == "__main__":
-    resolution = 256
+    resolution = 4096
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/snapshots/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.hdf5"
     velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
 
