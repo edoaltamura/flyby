@@ -43,8 +43,8 @@ def process_single_halo(
     # Construct spatial mask to feed into swiftsimio
     mask = sw.mask(path_to_snap, spatial_only=True)
     region = [
-        [xCen - map_size, xCen + map_size],
-        [yCen - map_size, yCen + map_size],
+        [xCen - 1.1 * map_size, xCen + 1.1 * map_size],
+        [yCen - 1.1 * map_size, yCen + 1.1 * map_size],
         [zCen - slice_thickness, zCen + slice_thickness]
     ]
     # temperature_units = mask.units.temperature
@@ -107,9 +107,9 @@ def process_single_halo(
     plt.axis('off')
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
+    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=color_maps[field])
     ax.set_xlim(region[0], region[1])
     ax.set_ylim(region[2], region[3])
-    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=color_maps[field])
     # circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
     # ax.add_artist(circle_r500)
     # ax.text(
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/snapshots/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.hdf5"
     velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
 
-    for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
+    for field in ['densities']:#, 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
         print(field)
         process_single_halo(
             snap_filepath_zoom,
