@@ -43,8 +43,8 @@ def process_single_halo(
     # Construct spatial mask to feed into swiftsimio
     mask = sw.mask(path_to_snap, spatial_only=False)
     region = [
-        [xCen - 6 * R500c, xCen + 6 * R500c],
-        [yCen - 6 * R500c, yCen + 6 * R500c],
+        [xCen - 3 * R500c, xCen + 3 * R500c],
+        [yCen - 3 * R500c, yCen + 3 * R500c],
         [zCen - slice_thickness, zCen + slice_thickness]
     ]
     temperature_units = mask.units.temperature
@@ -77,8 +77,29 @@ def process_single_halo(
         data.gas.velocity_divergences = np.abs(data.gas.velocity_divergences)
         smoothed_map = project_gas(data, resolution=resolution, project="velocity_divergences", parallel=True, region=region)
 
+    elif field == 'entropies':
+        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
+        data.gas.mass_weighted_temperatures = data.gas.masses * data.gas.temperatures
+
+        mean_molecular_weight = 0.59
+        data.gas.entropies = (
+                data.gas.mass_weighted_temperatures *
+                unyt.kB * unyt.pm * mean_molecular_weight /
+                data.gas.densities.to('g/cm**3')
+        )
+        data.gas.entropies = data.gas.entropies.to('keV*cm**2')
+        entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
+        smoothed_map = entropy_map / mass_map
+
     smoothed_map[smoothed_map == 0.] = np.nan
     smoothed_map = binary_normalise(np.log10(smoothed_map))
+
+    color_maps = {
+        'densities': 'bone',
+        'mass_weighted_temperatures': 'gist_heat',
+        'velocity_divergences': 'pink',
+        'entropies': 'copper'
+    }
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
@@ -89,16 +110,27 @@ def process_single_halo(
     ax.get_yaxis().set_visible(False)
     ax.set_xlim(region[0], region[1])
     ax.set_ylim(region[2], region[3])
-    ax.imshow(smoothed_map, origin="lower", extent=region, cmap='Greys_r')
+    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=color_maps[field])
+    circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
+    ax.add_artist(circle_r500)
+    ax.text(
+        xCen,
+        yCen + 1.05 * R500c,
+        r"$R_{500c}$",
+        color="black",
+        ha="center",
+        va="bottom"
+    )
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
 
 if __name__ == "__main__":
     resolution = 4096
-    snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/snapshots/L0300N0564_VR813_+1res_MinimumDistance_2749.hdf5"
-    velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR813_+1res_MinimumDistance/stf/L0300N0564_VR813_+1res_MinimumDistance_2749/L0300N0564_VR813_+1res_MinimumDistance_2749.properties"
+    snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/snapshots/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.hdf5"
+    velociraptor_properties_zoom = "//cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
 
-    for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences']:
+    for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
+        print(field)
         process_single_halo(
             snap_filepath_zoom,
             velociraptor_properties_zoom,
