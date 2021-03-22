@@ -130,7 +130,7 @@ if __name__ == "__main__":
         process_single_halo(
             snap_filepath_zoom,
             velociraptor_properties_zoom,
-            slice_thickness=unyt.unyt_quantity(1, unyt.Mpc),
+            slice_thickness=unyt.unyt_quantity(0.1, unyt.Mpc),
             map_size_R500_units=2,
             field=field
         )
