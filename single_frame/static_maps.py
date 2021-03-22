@@ -5,6 +5,7 @@ import numpy as np
 import swiftsimio as sw
 from swiftsimio.visualisation.projection import project_gas
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 from matplotlib import cm
 import matplotlib.colors as mcolors
 from PIL import Image, ImageOps, ImageEnhance
@@ -84,7 +85,7 @@ def process_single_halo(
     elif field == 'entropies':
         data.gas.mass_weighted_temperatures = data.gas.masses * data.gas.temperatures * unyt.boltzmann_constant
         mean_molecular_weight = 0.59
-        data.gas.number_densities = (data.gas.densities.to('g/cm**3') / (unyt.pm * mean_molecular_weight)).to('cm**-3')
+        data.gas.number_densities = (data.gas.densities.to('g/cm**3') / (unyt.mp * mean_molecular_weight)).to('cm**-3')
         data.gas.entropies = data.gas.mass_weighted_temperatures / data.gas.number_densities ** (2 / 3)
 
         entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
@@ -94,7 +95,7 @@ def process_single_halo(
         cmap = 'copper'
 
     # smoothed_map[smoothed_map == 0.] = np.nan
-    smoothed_map = binary_normalise(np.log10(smoothed_map.value + 1))
+    smoothed_map = binary_normalise(smoothed_map.value + 1)
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(10, 10), dpi=resolution // 10)
@@ -103,7 +104,7 @@ def process_single_halo(
     plt.axis('off')
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
-    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=cmap)
+    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=cmap, norm=LogNorm())
     force_aspect(ax)
     ax.set_xlim(region[0], region[1])
     ax.set_ylim(region[2], region[3])
