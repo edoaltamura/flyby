@@ -52,7 +52,7 @@ def process_single_halo(
     density_low = (1e-10 / unyt.cm ** 3 * unyt.mp).to(density_units)
     density_high = (10 / unyt.cm ** 3 * unyt.mp).to(density_units)
     mask.constrain_spatial(region)
-    mask.constrain_mask("gas", "temperatures", 1.e4 * temperature_units, 5.e10 * temperature_units)
+    mask.constrain_mask("gas", "temperatures", 5.e3 * temperature_units, 5.e10 * temperature_units)
     mask.constrain_mask("gas", "densities", density_low, density_high)
     data = sw.load(path_to_snap, mask=mask)
     region = [
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/snapshots/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.hdf5"
     velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
 
-    for field in ['densities']:#, 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
+    for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
         print(field)
         process_single_halo(
             snap_filepath_zoom,
