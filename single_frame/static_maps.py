@@ -87,7 +87,6 @@ def process_single_halo(
                 unyt.kB * unyt.pm * mean_molecular_weight /
                 data.gas.densities.to('g/cm**3') ** (2 / 3)
         )
-        data.gas.entropies = data.gas.entropies.to('keV*cm**2*Msun')
         entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
         smoothed_map = entropy_map / mass_map
 
@@ -127,7 +126,7 @@ def process_single_halo(
 if __name__ == "__main__":
     resolution = 4096
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/snapshots/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.hdf5"
-    velociraptor_properties_zoom = "//cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
+    velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
 
     for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
         print(field)
