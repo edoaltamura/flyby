@@ -85,7 +85,7 @@ def process_single_halo(
         data.gas.entropies = (
                 data.gas.mass_weighted_temperatures *
                 unyt.kB * unyt.pm * mean_molecular_weight /
-                data.gas.densities.to('g/cm**3')
+                data.gas.densities.to('g/cm**3') ** (2 / 3)
         )
         data.gas.entropies = data.gas.entropies.to('keV*cm**2')
         entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
