@@ -43,8 +43,8 @@ def process_single_halo(
     # Construct spatial mask to feed into swiftsimio
     mask = sw.mask(path_to_snap, spatial_only=True)
     region = [
-        [xCen - 1.1 * map_size, xCen + 1.1 * map_size],
-        [yCen - 1.1 * map_size, yCen + 1.1 * map_size],
+        [xCen - 1.5 * map_size, xCen + 1.5 * map_size],
+        [yCen - 1.5 * map_size, yCen + 1.5 * map_size],
         [zCen - slice_thickness, zCen + slice_thickness]
     ]
     # temperature_units = mask.units.temperature
@@ -105,18 +105,18 @@ def process_single_halo(
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     ax.imshow(smoothed_map, origin="lower", extent=region, cmap=cmap)
-    ax.set_xlim(region[0], region[1])
-    ax.set_ylim(region[2], region[3])
-    circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
-    ax.add_artist(circle_r500)
-    ax.text(
-        xCen,
-        yCen + 1.05 * R500c,
-        r"$R_{500c}$",
-        color="black",
-        ha="center",
-        va="bottom"
-    )
+    # ax.set_xlim(region[0], region[1])
+    # ax.set_ylim(region[2], region[3])
+    # circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
+    # ax.add_artist(circle_r500)
+    # ax.text(
+    #     xCen,
+    #     yCen + 1.05 * R500c,
+    #     r"$R_{500c}$",
+    #     color="black",
+    #     ha="center",
+    #     va="bottom"
+    # )
     plt.show()
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
