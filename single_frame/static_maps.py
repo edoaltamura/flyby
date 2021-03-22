@@ -134,7 +134,7 @@ def process_single_halo(
         )
         cmap = 'copper'
 
-    smoothed_map = binary_normalise(smoothed_map) + 1
+    # smoothed_map = binary_normalise(smoothed_map) + 1
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(10, 10), dpi=resolution // 10)
