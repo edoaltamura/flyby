@@ -63,7 +63,9 @@ def process_single_halo(
     ]
 
     if field == 'densities':
+        print(data.gas.densities)
         smoothed_map = project_gas(data, resolution=resolution, project="densities", parallel=True, region=region)
+        print(smoothed_map)
 
     elif field == 'mass_weighted_temperatures':
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
