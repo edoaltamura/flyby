@@ -63,9 +63,8 @@ def process_single_halo(
     ]
 
     if field == 'densities':
-        print(data.gas.densities)
         smoothed_map = project_gas(data, resolution=resolution, project="densities", parallel=True, region=region)
-        print(smoothed_map)
+        cmap = 'bone'
 
     elif field == 'mass_weighted_temperatures':
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
@@ -73,11 +72,13 @@ def process_single_halo(
         mass_weighted_temp_map = project_gas(data, resolution=resolution, project="mass_weighted_temperatures",
                                              parallel=True, region=region)
         smoothed_map = mass_weighted_temp_map / mass_map
+        cmap = 'gist_heat'
 
     elif field == 'velocity_divergences':
         data.gas.velocity_divergences[data.gas.velocity_divergences.value >= 0] = 0
         data.gas.velocity_divergences = np.abs(data.gas.velocity_divergences)
         smoothed_map = project_gas(data, resolution=resolution, project="velocity_divergences", parallel=True, region=region)
+        cmap = 'pink'
 
     elif field == 'entropies':
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
@@ -91,16 +92,10 @@ def process_single_halo(
         )
         entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
         smoothed_map = entropy_map / mass_map
+        cmap = 'copper'
 
     smoothed_map[smoothed_map == 0.] = np.nan
     smoothed_map = binary_normalise(np.log10(smoothed_map))
-
-    color_maps = {
-        'densities': 'bone',
-        'mass_weighted_temperatures': 'gist_heat',
-        'velocity_divergences': 'pink',
-        'entropies': 'copper'
-    }
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
@@ -109,19 +104,19 @@ def process_single_halo(
     plt.axis('off')
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
-    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=color_maps[field])
+    ax.imshow(smoothed_map, origin="lower", extent=region, cmap=cmap)
     ax.set_xlim(region[0], region[1])
     ax.set_ylim(region[2], region[3])
-    # circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
-    # ax.add_artist(circle_r500)
-    # ax.text(
-    #     xCen,
-    #     yCen + 1.05 * R500c,
-    #     r"$R_{500c}$",
-    #     color="black",
-    #     ha="center",
-    #     va="bottom"
-    # )
+    circle_r500 = plt.Circle((xCen, yCen), R500c, color="black", fill=False, linestyle='-')
+    ax.add_artist(circle_r500)
+    ax.text(
+        xCen,
+        yCen + 1.05 * R500c,
+        r"$R_{500c}$",
+        color="black",
+        ha="center",
+        va="bottom"
+    )
     plt.show()
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
