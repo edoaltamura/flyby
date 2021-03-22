@@ -94,16 +94,17 @@ def process_single_halo(
         smoothed_map = entropy_map / mass_map
         cmap = 'copper'
 
-    smoothed_map[smoothed_map == 0.] = np.nan
-    smoothed_map = binary_normalise(np.log10(smoothed_map))
+    # smoothed_map[smoothed_map == 0.] = np.nan
+    # smoothed_map = binary_normalise(np.log10(smoothed_map))
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
     ax = fig.add_subplot(1, 1, 1)
     fig.subplots_adjust(0, 0, 1, 1)
-    plt.axis('off')
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
+    # plt.axis('off')
+    # ax.get_xaxis().set_visible(False)
+    # ax.get_yaxis().set_visible(False)
+    force_aspect(ax)
     ax.imshow(smoothed_map, origin="lower", extent=region, cmap=cmap)
     # ax.set_xlim(region[0], region[1])
     # ax.set_ylim(region[2], region[3])
