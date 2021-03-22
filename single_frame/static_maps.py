@@ -52,7 +52,7 @@ def process_single_halo(
     density_low = (1e-10 / unyt.cm ** 3 * unyt.mp).to(density_units)
     density_high = (10 / unyt.cm ** 3 * unyt.mp).to(density_units)
     mask.constrain_spatial(region)
-    mask.constrain_mask("gas", "temperatures", 5.e3 * temperature_units, 5.e10 * temperature_units)
+    mask.constrain_mask("gas", "temperatures", 1.e5 * temperature_units, 5.e10 * temperature_units)
     mask.constrain_mask("gas", "densities", density_low, density_high)
     data = sw.load(path_to_snap, mask=mask)
     region = [
@@ -133,6 +133,6 @@ if __name__ == "__main__":
             snap_filepath_zoom,
             velociraptor_properties_zoom,
             slice_thickness=unyt.unyt_quantity(1, unyt.Mpc),
-            map_size_R500_units=1.5,
+            map_size_R500_units=2,
             field=field
         )
