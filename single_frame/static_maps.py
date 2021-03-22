@@ -78,6 +78,7 @@ def process_single_halo(
                                              parallel=True, region=region)
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
         mass_map[mass_map == 0.] = np.nan
+        mass_weighted_temp_map[mass_weighted_temp_map == 0.] = np.nan
         smoothed_map = mass_weighted_temp_map / mass_map
         cmap = 'gist_heat'
 
@@ -97,6 +98,7 @@ def process_single_halo(
 
         mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
         mass_map[mass_map == 0.] = np.nan
+        entropy_map[entropy_map == 0.] = np.nan
         smoothed_map = entropy_map / mass_map
         cmap = 'copper'
 
