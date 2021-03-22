@@ -66,29 +66,44 @@ def process_single_halo(
     ]
 
     if field == 'densities':
-        smoothed_map = project_gas(data, resolution=resolution, project="densities", parallel=True, region=region)
-        cmap = 'bone'
-
-    if field == 'masses':
-        smoothed_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
+        smoothed_map = project_gas(data, resolution=resolution, project="densities", parallel=True, region=region).value
         cmap = 'bone'
 
     elif field == 'mass_weighted_temperatures':
 
         data.gas.mass_weighted_temperatures = data.gas.masses * data.gas.temperatures
-        mass_weighted_temp_map = project_gas(data, resolution=resolution, project="mass_weighted_temperatures",
-                                             parallel=True, region=region)
-        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
-        mass_map[mass_map == 0.] = np.nan
-        mass_weighted_temp_map[mass_weighted_temp_map == 0.] = np.nan
-        smoothed_map = mass_weighted_temp_map / mass_map
+        mass_weighted_temp_map = project_gas(
+            data,
+            resolution=resolution,
+            project="mass_weighted_temperatures",
+            parallel=True,
+            region=region
+        ).value
+        mass_map = project_gas(
+            data,
+            resolution=resolution,
+            project="masses",
+            parallel=True,
+            region=region
+        ).value
+        smoothed_map = np.divide(
+            mass_weighted_temp_map,
+            mass_map,
+            out=np.zeros_like(mass_weighted_temp_map),
+            where=mass_map != 0
+        )
         cmap = 'gist_heat'
 
     elif field == 'velocity_divergences':
         data.gas.velocity_divergences[data.gas.velocity_divergences.value >= 0] = 0
         data.gas.velocity_divergences = np.abs(data.gas.velocity_divergences)
-        smoothed_map = project_gas(data, resolution=resolution, project="velocity_divergences", parallel=True,
-                                   region=region)
+        smoothed_map = project_gas(
+            data,
+            resolution=resolution,
+            project="velocity_divergences",
+            parallel=True,
+            region=region
+        ).value
         cmap = 'pink'
 
     elif field == 'entropies':
@@ -97,9 +112,26 @@ def process_single_halo(
         data.gas.number_densities = (data.gas.densities.to('g/cm**3') / (unyt.mp * mean_molecular_weight)).to('cm**-3')
         data.gas.entropies = data.gas.mass_weighted_temperatures / data.gas.number_densities ** (2 / 3)
 
-        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region).value
-        entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region).value
-        smoothed_map = np.divide(entropy_map, mass_map, out=np.zeros_like(entropy_map), where=mass_map != 0)
+        mass_map = project_gas(
+            data,
+            resolution=resolution,
+            project="masses",
+            parallel=True,
+            region=region
+        ).value
+        entropy_map = project_gas(
+            data,
+            resolution=resolution,
+            project="entropies",
+            parallel=True,
+            region=region
+        ).value
+        smoothed_map = np.divide(
+            entropy_map,
+            mass_map,
+            out=np.zeros_like(entropy_map),
+            where=mass_map != 0
+        )
         cmap = 'copper'
 
     smoothed_map = binary_normalise(smoothed_map) + 1
@@ -129,12 +161,11 @@ def process_single_halo(
 
 
 if __name__ == "__main__":
-    resolution = 256
+    resolution = 4096
     snap_filepath_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/snapshots/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.hdf5"
     velociraptor_properties_zoom = "/cosma6/data/dp004/dc-alta2/xl-zooms/hydro/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth/stf/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036/L0300N0564_VR2414_+1res_MinimumDistance_fixedAGNdT8.5_Nheat1_SNnobirth_0036.properties"
 
-    for field in [
-        'entropies']:  # ['masses', 'densities', 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
+    for field in ['densities', 'mass_weighted_temperatures', 'velocity_divergences', 'entropies']:
         print(field)
         process_single_halo(
             snap_filepath_zoom,
