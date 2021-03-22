@@ -98,7 +98,7 @@ def process_single_halo(
     smoothed_map = binary_normalise(np.log10(smoothed_map.value + 1))
 
     # Set-up figure and axes instance
-    fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
+    fig = plt.figure(figsize=(16, 16), dpi=resolution // 16)
     ax = fig.add_subplot(1, 1, 1)
     fig.subplots_adjust(0, 0, 1, 1)
     plt.axis('off')
