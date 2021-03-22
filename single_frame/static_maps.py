@@ -67,10 +67,11 @@ def process_single_halo(
         cmap = 'bone'
 
     elif field == 'mass_weighted_temperatures':
-        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
+
         data.gas.mass_weighted_temperatures = data.gas.masses * data.gas.temperatures
         mass_weighted_temp_map = project_gas(data, resolution=resolution, project="mass_weighted_temperatures",
                                              parallel=True, region=region)
+        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
         smoothed_map = mass_weighted_temp_map / mass_map
         cmap = 'gist_heat'
 
@@ -81,16 +82,14 @@ def process_single_halo(
         cmap = 'pink'
 
     elif field == 'entropies':
-        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
-        data.gas.mass_weighted_temperatures = data.gas.masses * data.gas.temperatures
-
+        data.gas.mass_weighted_temperatures = data.gas.masses * data.gas.temperatures * unyt.boltzmann_constant
         mean_molecular_weight = 0.59
-        data.gas.entropies = (
-                data.gas.mass_weighted_temperatures *
-                unyt.boltzmann_constant * unyt.pm * mean_molecular_weight /
-                data.gas.densities.to('g/cm**3') ** (2 / 3)
-        )
+        data.gas.number_densities = (data.gas.densities.to('g/cm**3') / (unyt.pm * mean_molecular_weight)).to('cm**-3')
+        data.gas.entropies = data.gas.mass_weighted_temperatures / data.gas.number_densities ** (2 / 3)
+
         entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
+
+        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
         smoothed_map = entropy_map / mass_map
         cmap = 'copper'
 
@@ -98,7 +97,7 @@ def process_single_halo(
     smoothed_map = binary_normalise(np.log10(smoothed_map.value + 1))
 
     # Set-up figure and axes instance
-    fig = plt.figure(figsize=(16, 16), dpi=resolution // 16)
+    fig = plt.figure(figsize=(10, 10), dpi=resolution // 10)
     ax = fig.add_subplot(1, 1, 1)
     fig.subplots_adjust(0, 0, 1, 1)
     plt.axis('off')
