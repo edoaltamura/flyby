@@ -41,19 +41,19 @@ def process_single_halo(
     map_size = map_size_R500_units * R500c
 
     # Construct spatial mask to feed into swiftsimio
-    mask = sw.mask(path_to_snap, spatial_only=True)
+    mask = sw.mask(path_to_snap, spatial_only=False)
     region = [
         [xCen - 1.5 * map_size, xCen + 1.5 * map_size],
         [yCen - 1.5 * map_size, yCen + 1.5 * map_size],
         [zCen - slice_thickness, zCen + slice_thickness]
     ]
-    # temperature_units = mask.units.temperature
-    # density_units = mask.units.mass / mask.units.length ** 3
-    # density_low = (1e-10 / unyt.cm ** 3 * unyt.mp).to(density_units)
-    # density_high = (2 / unyt.cm ** 3 * unyt.mp).to(density_units)
+    temperature_units = mask.units.temperature
+    density_units = mask.units.mass / mask.units.length ** 3
+    density_low = (1e-10 / unyt.cm ** 3 * unyt.mp).to(density_units)
+    density_high = (10 / unyt.cm ** 3 * unyt.mp).to(density_units)
     mask.constrain_spatial(region)
-    # mask.constrain_mask("gas", "temperatures", 1.e5 * temperature_units, 5.e9 * temperature_units)
-    # mask.constrain_mask("gas", "densities", density_low, density_high)
+    mask.constrain_mask("gas", "temperatures", 1.e4 * temperature_units, 5.e10 * temperature_units)
+    mask.constrain_mask("gas", "densities", density_low, density_high)
     data = sw.load(path_to_snap, mask=mask)
     region = [
         xCen - map_size,
@@ -95,7 +95,7 @@ def process_single_halo(
         cmap = 'copper'
 
     # smoothed_map[smoothed_map == 0.] = np.nan
-    # smoothed_map = binary_normalise(np.log10(smoothed_map))
+    smoothed_map = binary_normalise(np.log10(smoothed_map + 1))
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(8, 8), dpi=resolution // 8)
