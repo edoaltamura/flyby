@@ -118,7 +118,6 @@ def process_single_halo(
         ha="center",
         va="bottom"
     )
-    plt.show()
     fig.savefig(f'{field}.png', bbox_inches='tight', pad_inches=0.)
 
 
