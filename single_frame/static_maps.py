@@ -97,12 +97,12 @@ def process_single_halo(
         data.gas.number_densities = (data.gas.densities.to('g/cm**3') / (unyt.mp * mean_molecular_weight)).to('cm**-3')
         data.gas.entropies = data.gas.mass_weighted_temperatures / data.gas.number_densities ** (2 / 3)
 
-        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region)
-        entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region)
+        mass_map = project_gas(data, resolution=resolution, project="masses", parallel=True, region=region).value
+        entropy_map = project_gas(data, resolution=resolution, project="entropies", parallel=True, region=region).value
         smoothed_map = np.divide(entropy_map, mass_map, out=np.zeros_like(entropy_map), where=mass_map != 0)
         cmap = 'copper'
 
-    smoothed_map = binary_normalise(smoothed_map.value) + 1
+    smoothed_map = binary_normalise(smoothed_map) + 1
 
     # Set-up figure and axes instance
     fig = plt.figure(figsize=(10, 10), dpi=resolution // 10)
